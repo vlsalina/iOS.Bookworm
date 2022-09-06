@@ -23,15 +23,28 @@ struct DetailView: View {
                     .resizable()
                     .scaledToFit()
                 
-                Text(book.genre?.uppercased() ?? "FANTASY")
-                    .font(.caption)
-                    .fontWeight(.black)
-                    .padding(8)
-                    .foregroundColor(.white)
-                    .background(.black.opacity(0.75))
-                    .clipShape(Capsule())
-                    .offset(x: -5, y: -5)
+                
+                HStack {
+                    Text(ContentViewModel.formatDate(date: book.date!))
+                        .font(.caption)
+                        .fontWeight(.black)
+                        .padding(8)
+                        .foregroundColor(.white)
+                        .background(.black.opacity(0.75))
+                        .clipShape(Capsule())
+                    
+                    Text(book.genre?.uppercased() ?? "FANTASY")
+                        .font(.caption)
+                        .fontWeight(.black)
+                        .padding(8)
+                        .foregroundColor(.white)
+                        .background(.black.opacity(0.75))
+                        .clipShape(Capsule())
+                }
+                .offset(x: -5, y: -5)
             }
+            
+            
             
             Text(book.author ?? "Unknown author")
                 .font(.title)

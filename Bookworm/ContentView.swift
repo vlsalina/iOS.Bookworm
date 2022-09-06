@@ -31,8 +31,14 @@ struct ContentView: View {
                                 Text(book.title ?? "Unknown Title")
                                     .font(.headline)
                                     .foregroundColor(ratingColor(rating: Int(book.rating)))
-                                Text(book.author ?? "Unknown Author")
-                                    .foregroundColor(.secondary)
+                                HStack(spacing: 20) {
+                                    Text(book.author ?? "Unknown Author")
+                                        .foregroundColor(.secondary)
+                                    Text(ContentViewModel.formatDate(date: book.date!))
+                                        .foregroundColor(.secondary)
+                                    
+                                    
+                                }
                             }
                         }
                     }
