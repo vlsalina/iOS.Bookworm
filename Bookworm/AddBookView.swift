@@ -7,6 +7,14 @@
 
 import SwiftUI
 
+struct NewBook {
+    var title: String
+    var author: String
+    var genre: String
+    var review: String
+    var rating: Int
+}
+
 struct AddBookView: View {
     @Environment(\.managedObjectContext) var moc
     @Environment(\.dismiss) var dismiss
@@ -16,6 +24,8 @@ struct AddBookView: View {
     @State private var genre = ""
     @State private var review = ""
     @State private var rating = 3
+    
+    @State private var validationAlert = false
     
     let genres = ["Fantasy", "Horror", "Kids", "Mystery", "Poetry", "Romance", "Thriller"]
     
@@ -44,15 +54,22 @@ struct AddBookView: View {
                     Button(action: {
                         let newBook = Book(context: moc)
                         
-                        newBook.id = UUID()
-                        newBook.title = title
-                        newBook.author = author
-                        newBook.genre = genre
-                        newBook.review = review
-                        newBook.rating = Int16(rating)
+                        let result = AddBookViewModel.validateDetails(newBook: NewBook(title: title, author: author, genre: genre, review: review, rating: rating))
                         
-                        try? moc.save()
-                        dismiss()
+                        if (result) {
+                            newBook.id = UUID()
+                            newBook.title = title
+                            newBook.author = author
+                            newBook.genre = genre
+                            newBook.review = review
+                            newBook.rating = Int16(rating)
+                            
+                            try? moc.save()
+                            dismiss()
+                        } else {
+                            validationAlert = true
+                        }
+                        
                         
                     }) {
                         HStack {
@@ -67,6 +84,13 @@ struct AddBookView: View {
             
         }
         .navigationTitle("Add Book")
+        .alert(isPresented: $validationAlert) {
+            Alert(
+                title: Text("Alert"),
+                message: Text("Invalid book details"),
+                dismissButton: .default(Text("OK"))
+            )
+        }
     }
 }
 
