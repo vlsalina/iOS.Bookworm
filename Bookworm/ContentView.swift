@@ -21,19 +21,21 @@ struct ContentView: View {
             List {
                 ForEach(books) { book in
                     NavigationLink {
-                        DetailView(book: book)                    } label: {
-                            HStack {
-                                EmojiRatingReview(rating: book.rating)
-                                    .font(.largeTitle)
-                                
-                                VStack(alignment: .leading) {
-                                    Text(book.title ?? "Unknown Title")
-                                        .font(.headline)
-                                    Text(book.author ?? "Unknown Author")
-                                        .foregroundColor(.secondary)
-                                }
+                        DetailView(book: book)
+                    } label: {
+                        HStack {
+                            EmojiRatingReview(rating: book.rating)
+                                .font(.largeTitle)
+                            
+                            VStack(alignment: .leading) {
+                                Text(book.title ?? "Unknown Title")
+                                    .font(.headline)
+                                    .foregroundColor(ratingColor(rating: Int(book.rating)))
+                                Text(book.author ?? "Unknown Author")
+                                    .foregroundColor(.secondary)
                             }
                         }
+                    }
                 }
                 .onDelete(perform: deleteBooks)
             }
@@ -67,6 +69,16 @@ struct ContentView: View {
         
         // save the context
         try? moc.save()
+    }
+    
+    func ratingColor(rating: Int) -> Color {
+        switch (rating) {
+        case 1: return Color.red
+        case 2: return Color.orange
+        case 3: return Color.yellow
+        case 4: return Color.green
+        default: return Color.blue
+        }
     }
 }
 
